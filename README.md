@@ -15,13 +15,6 @@ What's in this repo so far:
 
 bibtex:
 ```
-@inproceedings{Zagoruyko2017AT,
-    author = {Sergey Zagoruyko and Nikos Komodakis},
-    title = {Paying More Attention to Attention: Improving the Performance of
-             Convolutional Neural Networks via Attention Transfer},
-    booktitle = {ICLR},
-    url = {https://arxiv.org/abs/1612.03928},
-    year = {2017}}
 ```
 
 ## Requirements
