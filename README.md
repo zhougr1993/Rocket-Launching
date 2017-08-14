@@ -1,15 +1,17 @@
 Rocket Launching
 ==============
 
-PyTorch code for "Rocket Launching: A unified and effecient framework for 
-                            training well-behaved light net" <https://arxiv.org/abs/><br>
+PyTorch code for "Rocket Launching: A universal and efficient framework for training
+well-performing light net" <https://arxiv.org/abs/><br>
+
+<img src=./img/rocket_online.png width=25%><img src=vis_rocket.jpg width=75%>
 
 ## About this code
-This code is based on the [attention-transfer code](https://github.com/szagoruyko/attention-transfer), the code uses PyTorch <https://pytorch.org>.
+This code is based on the [attention-transfer code](https://github.com/szagoruyko/attention-transfer), the code uses PyTorch (https://pytorch.org).
 
 What's in this repo so far:
  * Rocket-Interval code for CIFAR-10,CIFAR-100 experiments
- * Code for Rocket-Bottle (ResNet-16-ResNet-40)
+ * Code for Rocket-Bottom (ResNet-16-ResNet-40)
  * gradient block
  * parameter sharing
 
@@ -37,12 +39,12 @@ pip install -r requirements.txt
 
 This section describes how to get the results in the table 1 of the paper.
 
-Third column, train student basic:
+Third column, train light basic:
 
 ```
 python rocket_interval.py --save logs/resnet_16_1_basic --depth 16 --width 1
 python rocket_interval.py --save logs/resnet_16_2_basic --depth 16 --width 2
-python rocket_bottle.py --save logs/resnet_bottle_16_1_basic --depth 16 --width 1
+python rocket_bottom.py --save logs/resnet_bottom_16_1_basic --depth 16 --width 1
 ```
 
 Ninth column, train booster only:
@@ -58,25 +60,25 @@ python rocket_interval.py --save logs/at_16_1_40_1 --width 1 --teacher_id resnet
 python rocket_interval.py --save logs/at_16_2_40_2 --width 2 --teacher_id resnet_40_2_booster --beta 1e+3
 ```
 
-Fifth column, train with kd:
+Fifth column, train with KD:
 ```
 python rocket_interval.py --save logs/kd_16_1_16_2 --width 1 --teacher_id resnet_40_1_booster --alpha 0.9
 python rocket_interval.py --save logs/kd_16_2_16_2 --width 2 --teacher_id resnet_40_2_booster --alpha 0.9
-python rocket_bottle.py --save logs/kd_bottle_16_1_40_1 --teacher_id resnet_40_1_booster --alpha 0.9
+python rocket_bottom.py --save logs/kd_bottom_16_1_40_1 --teacher_id resnet_40_1_booster --alpha 0.9
 ```
 
 Sixth column and eighth column, train rocket launching:
 ```
 python rocket_interval.py --save logs/rocket_interval_16_1_40_1 --width 1 --student_depth 16  --depth 40 --gamma 0.03 
 python rocket_interval.py --save logs/rocket_interval_16_2_40_2 --width 2 --student_depth 16  --depth 40 --gamma 0.03 
-python rocket_bottle.py --save logs/rocket_bottle_16_1_40_1 --width 1 --student_depth 16  --depth 40 --gamma 0.03 
+python rocket_bottom.py --save logs/rocket_bottom_16_1_40_1 --width 1 --student_depth 16  --depth 40 --gamma 0.03 
 ```
 
-Seventh column, train rocket launching with kd:
+Seventh column, train rocket launching with KD:
 ```
 python rocket_interval.py --save logs/rocket_interval_16_1_40_1 --width 1 --student_depth 16  --depth 40 --gamma 0.03 --alpha 0.9
 python rocket_interval.py --save logs/rocket_interval_16_2_40_2 --width 2 --student_depth 16  --depth 40 --gamma 0.03 --alpha 0.9
-python rocket_bottle.py --save logs/rocket_bottle_16_1_40_1 --width 1 --student_depth 16  --depth 40 --gamma 0.03 --alpha 0.9
+python rocket_bottom.py --save logs/rocket_bottom_16_1_40_1 --width 1 --student_depth 16  --depth 40 --gamma 0.03 --alpha 0.9
 ```
 
 ### Table 2
