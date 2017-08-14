@@ -210,8 +210,8 @@ def resnet(depth, width, num_classes, stu_depth=0):
         else:
             return z + x
 
-    def group(o, params, stats, base, mode, stride):
-        for i in range(n):
+    def group(o, params, stats, base, mode, stride, n_layer):
+        for i in range(n_layer):
             o = block(o, params, stats, '%s.block%d' % (base, i),
                       mode, stride if i == 0 else 1, 't', False)
         return o
@@ -224,14 +224,24 @@ def resnet(depth, width, num_classes, stu_depth=0):
 
     def f(input, params, stats, mode, prefix=''):
         x = F.conv2d(input, params[prefix + 'conv0'], padding=1)
-        g0 = group(x, params, stats, prefix + 'group0', mode, 1)
-        g1 = group(g0, params, stats, prefix + 'group1', mode, 2)
-        g2 = group(g1, params, stats, prefix + 'group2', mode, 2)
-        o = F.relu(batch_norm(g2, params, stats, prefix + 'bn', mode))
-        o = F.avg_pool2d(o, 8, 1, 0)
-        o = o.view(o.size(0), -1)
-        o = F.linear(o, params[prefix + 'fc.weight'],
+        if n == 6:
+            g0 = group(x, params, stats, prefix + 'group0', mode, 1, n)
+            g1 = group(g0, params, stats, prefix + 'group1', mode, 2, n)
+            g2 = group(g1, params, stats, prefix + 'group2', mode, 2, n)
+            o = F.relu(batch_norm(g2, params, stats, prefix + 'bn', mode))
+            o = F.avg_pool2d(o, 8, 1, 0)
+            o = o.view(o.size(0), -1)
+            o = F.linear(o, params[prefix + 'fc.weight'],
                      params[prefix + 'fc.bias'])
+        elif n == 2:
+            g0 = group(x, params, stats, prefix + 'group0', mode, 1, n)
+            g1 = group(g0, params, stats, prefix + 'group1', mode, 2, n)
+            o = F.relu(batch_norm(g1, params, stats, prefix + 'bns', mode))
+            o = F.avg_pool2d(o, 16, 1, 0)
+            o = o.view(o.size(0), -1)
+            o = F.linear(o, params[prefix + 'fcs.weight'],
+                     params[prefix + 'fcs.bias'])
+
         #x_s = F.conv2d(input, params[prefix+'conv0_s'], padding=1)
         if stu_depth != 0:
             if opt.param_share:
@@ -251,7 +261,7 @@ def resnet(depth, width, num_classes, stu_depth=0):
                           params[prefix + 'fcs.bias'])
             return os, o, [g0, g1, g2, gs0, gs1]
         else:
-            return o, [g0, g1, g2]
+            return o, [g0, g1]
     return f, flat_params, flat_stats
 
 

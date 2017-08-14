@@ -4,10 +4,10 @@ Rocket Launching
 PyTorch code for "Rocket Launching: A universal and efficient framework for training
 well-performing light net" <https://arxiv.org/abs/><br>
 
-<img src=./img/rocket_online.png width=25%><img src=./img/vis_rocket.jpg width=75%>
+<img src=./img/rocket_online.png width=25%><img src=./img/vis_rocket.jpg width=75% height="60%">
 
 ## About this code
-This code is based on the [attention-transfer code](https://github.com/szagoruyko/attention-transfer), the code uses PyTorch (https://pytorch.org).
+This code is based on the [attention-transfer code](https://github.com/szagoruyko/attention-transfer), the code uses [PyTorch](https://pytorch.org).
 
 What's in this repo so far:
  * Rocket-Interval code for CIFAR-10,CIFAR-100 experiments
@@ -76,9 +76,9 @@ python rocket_bottom.py --save logs/rocket_bottom_16_1_40_1 --width 1 --student_
 
 Seventh column, train rocket launching with KD:
 ```
-python rocket_interval.py --save logs/rocket_interval_16_1_40_1 --width 1 --student_depth 16  --depth 40 --gamma 0.03 --alpha 0.9
-python rocket_interval.py --save logs/rocket_interval_16_2_40_2 --width 2 --student_depth 16  --depth 40 --gamma 0.03 --alpha 0.9
-python rocket_bottom.py --save logs/rocket_bottom_16_1_40_1 --width 1 --student_depth 16  --depth 40 --gamma 0.03 --alpha 0.9
+python rocket_interval.py --save logs/rocket_interval_16_1_40_1 --width 1 --student_depth 16  --depth 40 --teacher_id resnet_40_1_booster --gamma 0.03 --alpha 0.9
+python rocket_interval.py --save logs/rocket_interval_16_2_40_2 --width 2 --student_depth 16  --depth 40 --teacher_id resnet_40_2_booster --gamma 0.03 --alpha 0.9
+python rocket_bottom.py --save logs/rocket_bottom_16_1_40_1 --width 1 --student_depth 16  --depth 40 --teacher_id resnet_40_1_booster --gamma 0.03 --alpha 0.9
 ```
 
 ### Table 2
