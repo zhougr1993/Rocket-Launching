@@ -170,18 +170,18 @@ def resnet(depth, width, num_classes, stu_depth=0):
                  }
     else:
         params = {'conv0': conv_params(3, 16, 3),
-                  'group0': gen_group_params(16, widths[0], n),
-                  'group1': gen_group_params(widths[0], widths[1], n),
-                  'group2': gen_group_params(widths[1], widths[2], n),
+                  'group0': gen_group_params(16, widths[0], 6),
+                  'group1': gen_group_params(widths[0], widths[1], 6),
+                  'group2': gen_group_params(widths[1], widths[2], 6),
                   'bn': bnparams(widths[2]),
                   'bns': bnparams(widths[1]),
                   'fc': linear_params(widths[2], num_classes),
                   'fcs': linear_params(widths[1], num_classes),
                   }
 
-        stats = {'group0': gen_group_stats(16, widths[0], n),
-                 'group1': gen_group_stats(widths[0], widths[1], n),
-                 'group2': gen_group_stats(widths[1], widths[2], n),
+        stats = {'group0': gen_group_stats(16, widths[0], 6),
+                 'group1': gen_group_stats(widths[0], widths[1], 6),
+                 'group2': gen_group_stats(widths[1], widths[2], 6),
                  'bn': bnstats(widths[2]),
                  'bns': bnstats(widths[1]),
                  }
@@ -225,17 +225,17 @@ def resnet(depth, width, num_classes, stu_depth=0):
     def f(input, params, stats, mode, prefix=''):
         x = F.conv2d(input, params[prefix + 'conv0'], padding=1)
         if n == 6:
-            g0 = group(x, params, stats, prefix + 'group0', mode, 1, n)
-            g1 = group(g0, params, stats, prefix + 'group1', mode, 2, n)
-            g2 = group(g1, params, stats, prefix + 'group2', mode, 2, n)
+            g0 = group(x, params, stats, prefix + 'group0', mode, 1, 6)
+            g1 = group(g0, params, stats, prefix + 'group1', mode, 2, 6)
+            g2 = group(g1, params, stats, prefix + 'group2', mode, 2, 6)
             o = F.relu(batch_norm(g2, params, stats, prefix + 'bn', mode))
             o = F.avg_pool2d(o, 8, 1, 0)
             o = o.view(o.size(0), -1)
             o = F.linear(o, params[prefix + 'fc.weight'],
                      params[prefix + 'fc.bias'])
         elif n == 2:
-            g0 = group(x, params, stats, prefix + 'group0', mode, 1, n)
-            g1 = group(g0, params, stats, prefix + 'group1', mode, 2, n)
+            g0 = group(x, params, stats, prefix + 'group0', mode, 1, 6)
+            g1 = group(g0, params, stats, prefix + 'group1', mode, 2, 6)
             o = F.relu(batch_norm(g1, params, stats, prefix + 'bns', mode))
             o = F.avg_pool2d(o, 16, 1, 0)
             o = o.view(o.size(0), -1)
