@@ -389,14 +389,14 @@ def main():
                 T = 4
                 loss_student = F.cross_entropy(ys, targets)
                 loss_teacher = F.cross_entropy(y_t_auto, targets)
-                loss_course = opt.beta * \
+                loss_course = opt.gamma * \
                     ((y_t_auto - ys) * (y_t_auto - ys)).sum() / opt.batchSize
                 y_tech_temp = torch.autograd.Variable(
                     y_t_auto.data, requires_grad=False)
                 log_kd = rocket_distillation(
                     ys, y_t, targets, opt.temperature, opt.alpha)
                 return rocket_distillation(ys, y_t, targets, opt.temperature, opt.alpha) \
-                    + F.cross_entropy(y_t_auto, targets) + F.cross_entropy(ys, targets) + opt.beta * ((y_tech_temp - ys) * (
+                    + F.cross_entropy(y_t_auto, targets) + F.cross_entropy(ys, targets) + opt.gamma * ((y_tech_temp - ys) * (
                         y_tech_temp - ys)).sum() / opt.batchSize, (ys, y_t_auto, loss_student, loss_teacher, loss_course, log_kd)
             else:
                 y_s, y_t, loss_groups = data_parallel(
@@ -413,14 +413,14 @@ def main():
                 T = 4
                 loss_student = F.cross_entropy(ys, targets)
                 loss_teacher = F.cross_entropy(y, targets)
-                loss_course = opt.beta * \
+                loss_course = opt.gamma * \
                     ((y - ys) * (y - ys)).sum() / opt.batchSize
                 if opt.grad_block:
                     y_course = torch.autograd.Variable(
                         y.data, requires_grad=False)
                 else:
                     y_course = y
-                return F.cross_entropy(y, targets) + F.cross_entropy(ys, targets) + opt.beta * ((y_course - ys) * (y_course - ys)).sum() / opt.batchSize, (ys, y, loss_student, loss_teacher, loss_course)
+                return F.cross_entropy(y, targets) + F.cross_entropy(ys, targets) + opt.gamma * ((y_course - ys) * (y_course - ys)).sum() / opt.batchSize, (ys, y, loss_student, loss_teacher, loss_course)
             else:
                 y = data_parallel(f, inputs, params, stats, sample[
                                   2], np.arange(opt.ngpu))[0]
@@ -465,7 +465,7 @@ def main():
 
             epoch = state['epoch'] + 1
             if epoch in sigma_refine_step:
-                opt.running_sigma += opt.beta
+                opt.running_sigma += opt.gamma
             if epoch in epoch_step:
                 lr = state['optimizer'].param_groups[0]['lr']
                 state['optimizer'] = create_optimizer(
