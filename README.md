@@ -2,7 +2,7 @@ Rocket Launching
 ==============
 
 PyTorch code for "Rocket Launching: A universal and efficient framework for training
-well-performing light net" <https://arxiv.org/abs/><br>
+well-performing light net" <https://arxiv.org/abs/1708.04106><br>
 
 <img src=./img/rocket_online.png width=25%><img src=./img/vis_rocket.jpg width=75% height="60%">
 
@@ -17,6 +17,12 @@ What's in this repo so far:
 
 bibtex:
 ```
+@article{zhou2017Rocket,
+  title={Rocket Launching: A unified and effecient framework for training well-behaved light net},
+    author={Zhou, Guorui and Fan, Ying and Cui, Runpeng and Bian, Weijie and Zhu, Xiaoqiang and Kun, Gai},
+      journal={arXiv preprint arXiv:1708.04106},
+        year={2017}
+}
 ```
 
 ## Requirements
